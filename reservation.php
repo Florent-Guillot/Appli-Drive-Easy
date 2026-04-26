@@ -1,13 +1,11 @@
 <?php
 require_once 'database.php';
 
-// Récupération des véhicules disponibles
 $stmt = $pdo->query("SELECT * FROM vehicule WHERE disponibilite = 'Disponible'");
 $vehicules = $stmt->fetchAll();
 
 $errors = [];
 
-// Soumission du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $vehicule = $_POST['vehicule'] ?? '';
@@ -18,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date_debut = $_POST['date_debut'] ?? '';
     $date_fin = $_POST['date_fin'] ?? '';
 
-    // Validation
     if ($vehicule === '') $errors[] = "Veuillez choisir un véhicule.";
     if ($nom === '') $errors[] = "Le nom est obligatoire.";
     if ($prenom === '') $errors[] = "Le prénom est obligatoire.";
@@ -28,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
 
-        // Récupération du prix du véhicule
         $stmt = $pdo->prepare("SELECT montant_ttc, marque, modele FROM vehicule WHERE id_vehicule = ?");
         $stmt->execute([$vehicule]);
         $car = $stmt->fetch();
@@ -36,19 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $prixJour = $car['montant_ttc'];
         $vehiculeNom = $car['marque'] . ' ' . $car['modele'];
 
-        // Calcul du nombre de jours
         $jours = (strtotime($date_fin) - strtotime($date_debut)) / 86400;
         if ($jours < 1) $jours = 1;
 
-        // Calcul du montant total
         $total = $prixJour * $jours;
 
-        // Insertion en base
         $stmt = $pdo->prepare("INSERT INTO reservation (id_vehicule, nom, prenom, telephone, age, date_debut, date_fin, montant_ttc)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$vehicule, $nom, $prenom, $telephone, $age, $date_debut, $date_fin, $total]);
 
-        // Redirection avec données
         header("Location: confirmation.php?nom=$nom&vehicule=$vehicule&debut=$date_debut&fin=$date_fin&montant=$total&jours=$jours");
         exit;
     }
