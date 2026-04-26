@@ -1,16 +1,12 @@
 <?php
-// ============================================================
-// DriveEasy — Connexion à la base de données (PDO)
-// Fichier : config/database.php
-// ============================================================
 
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'driveeasy');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+$host = "127.0.0.1";
+$dbname = "driveeasy";
+$user = "root";
+$pass = "";
+$charset = "utf8mb4";
 
-$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -19,8 +15,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+    $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
-    // En production, ne jamais afficher le message d'erreur brut
-    die('<p style="color:red;font-family:sans-serif;">Erreur de connexion à la base de données. Vérifiez que XAMPP est lancé.</p>');
+    die("Erreur : Impossible de se connecter à la base de données.");
 }
