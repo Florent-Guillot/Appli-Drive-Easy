@@ -1,61 +1,58 @@
--- ============================================================
--- DriveEasy — Script SQL complet
--- Base de données : driveeasy
--- Encodage : utf8mb4_general_ci
--- ============================================================
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-SET NAMES utf8mb4;
 
--- ------------------------------------------------------------
--- Table : vehicule
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `vehicule` (
-  `id_vehicule`   INT(11)       NOT NULL AUTO_INCREMENT,
-  `marque`        VARCHAR(100)  NOT NULL,
-  `modele`        VARCHAR(100)  NOT NULL,
-  `type`          VARCHAR(50)   NOT NULL,
-  `capacite`      INT(11)       NOT NULL,
-  `prix_jour`     DECIMAL(6,2)  NOT NULL,
-  `boite`         TINYINT(1)    NOT NULL COMMENT '0 = manuelle, 1 = automatique',
-  `disponibilite` VARCHAR(50)   NOT NULL,
-  `description`   TEXT,
-  `image`         VARCHAR(255),
-  PRIMARY KEY (`id_vehicule`)
+CREATE TABLE `reservation` (
+  `id_reservation` int(11) NOT NULL,
+  `nom` varchar(100) NOT NULL,
+  `prenom` varchar(100) NOT NULL,
+  `telephone` varchar(20) NOT NULL,
+  `date_debut` date NOT NULL,
+  `date_fin` date NOT NULL,
+  `montant_ttc` float NOT NULL,
+  `age` int(11) NOT NULL,
+  `id_vehicule` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- ------------------------------------------------------------
--- Table : reservation
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `reservation` (
-  `id_reservation` INT(11)       NOT NULL AUTO_INCREMENT,
-  `nom`            VARCHAR(100)  NOT NULL,
-  `prenom`         VARCHAR(100)  NOT NULL,
-  `telephone`      VARCHAR(20)   NOT NULL,
-  `date_debut`     DATE          NOT NULL,
-  `date_fin`       DATE          NOT NULL,
-  `montant_ttc`    FLOAT         NOT NULL,
-  `age_client`     INT(11)       NOT NULL,
-  `id_vehicule`    INT(11)       NOT NULL,
-  PRIMARY KEY (`id_reservation`),
-  KEY `id_vehicule` (`id_vehicule`),
-  CONSTRAINT `reservation_ibfk_1`
-    FOREIGN KEY (`id_vehicule`) REFERENCES `vehicule` (`id_vehicule`)
+INSERT INTO `reservation` (`id_reservation`, `nom`, `prenom`, `telephone`, `date_debut`, `date_fin`, `montant_ttc`, `age`, `id_vehicule`) VALUES
+(6, 'Florent', 'sfqfs', '0609928215', '2026-04-26', '2026-04-27', 0, 18, 3),
+(9, 'Florent', 'sfqfs', '0609928215', '2026-04-26', '2026-04-29', 1140, 18, 2);
+
+CREATE TABLE `vehicule` (
+  `id_vehicule` int(11) NOT NULL,
+  `marque` varchar(100) NOT NULL,
+  `modele` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `capacite` int(11) NOT NULL,
+  `prix_jour` decimal(6,2) NOT NULL,
+  `montant_ttc` int(11) NOT NULL,
+  `boite` tinyint(1) NOT NULL COMMENT '0 = manuelle, 1 = automatique',
+  `disponibilite` varchar(50) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- ------------------------------------------------------------
--- Données de test — 8 véhicules de collection
--- ------------------------------------------------------------
-INSERT INTO `vehicule` (`marque`, `modele`, `type`, `capacite`, `prix_jour`, `boite`, `disponibilite`, `description`, `image`) VALUES
-('Ferrari',        '308 GTS',          'Cabriolet', 2, 450.00, 0, 'Disponible',     'Icône des années 80, la Ferrari 308 GTS est un cabriolet mid-engine à moteur V8 de 2,9L. Propulsée à 255 ch, elle incarne le mythe du cheval cabré dans toute sa splendeur italienne.', 'ferrari_308.jpg'),
-('Jaguar',         'E-Type V12',        'Cabriolet', 2, 380.00, 0, 'Disponible',     'Surnommée la plus belle voiture du monde par Enzo Ferrari lui-même, la Jaguar E-Type est un chef-d\'œuvre de design et de performance britannique.', 'jaguar_etype.jpg'),
-('Porsche',        '911 Carrera 3.0',   'Sportive',  2, 320.00, 0, 'Disponible',     'La Porsche 911 Carrera de 1977, avec son fameux flat-six 3.0L atmosphérique, est l\'expression ultime du plaisir de conduire à l\'allemande.', 'porsche_911.jpg'),
-('Alfa Romeo',     'Spider Duetto',     'Cabriolet', 2, 180.00, 0, 'Non disponible', 'Rendu célèbre par Le Lauréat, l\'Alfa Romeo Spider Duetto est l\'archétype du roadster italien : lignes sensuelles, mélodie du moteur, dolce vita garantie.', 'alfa_spider.jpg'),
-('Mercedes-Benz',  '280 SL Pagode',     'Coupé',     2, 290.00, 0, 'Disponible',     'La Mercedes 280 SL Pagode (1968) est une élégance intemporelle sur roues. Son toit amovible en forme de pagode et son six cylindres suave en font une pièce de collection absolue.', 'mercedes_280sl.jpg'),
-('Aston Martin',   'DB6 Vantage',       'Berline',   4, 520.00, 0, 'Disponible',     'L\'Aston Martin DB6 : la voiture de James Bond dans toute sa magnificence. Six cylindres en ligne, carrosserie sculptée à la main, raffinement britannique à l\'état pur.', 'astonmartin_db6.jpg'),
-('Lamborghini',    'Countach LP400',    'Sportive',  2, 680.00, 0, 'Non disponible', 'La Lamborghini Countach est le symbole absolu des années 70-80. Ses lignes angulaires et son V12 rugissant de 375 ch ont défini à jamais l\'idée de supercar.', 'lambo_countach.jpg'),
-('Maserati',       'Merak SS',          'Coupé',     2, 250.00, 0, 'Disponible',     'Le Maserati Merak SS réunit le design de Giorgetto Giugiaro et un V6 biturbo de 2,9L. Une GT italienne alliant charisme et performance avec une discrétion de bon ton.', 'maserati_merak.jpg');
+INSERT INTO `vehicule` (`id_vehicule`, `marque`, `modele`, `type`, `capacite`, `prix_jour`, `montant_ttc`, `boite`, `disponibilite`, `description`, `image`) VALUES
+(1, 'Shelby', 'Cobra 427', 'Cabriolet', 2, 520.00, 520, 0, 'Disponible', 'Icône absolue des années 60, la Shelby Cobra 427 est un roadster brutal animé par un V8 américain surdimensionné. Légère, sauvage et mythique, elle incarne l’âge d’or des muscle cars de compétition.', 'vehicule1.png'),
+(2, 'Chevrolet', 'Corvette C1', 'Cabriolet', 2, 380.00, 380, 0, 'Disponible', 'Symbole du rêve américain, la Corvette C1 de 1958 séduit par ses doubles optiques, ses chromes généreux et son style rock’n’roll. Un cabriolet iconique qui respire la liberté des sixties.', 'vehicule2.png'),
+(3, 'Fiat', 'Barchetta', 'Cabriolet', 2, 180.00, 180, 0, 'Disponible', 'Petit roadster italien plein de charme, la Fiat Barchetta séduit par sa légèreté, son style néo‑rétro et son moteur vif. Une voiture plaisir idéale pour les balades ensoleillées.', 'vehicule3.png'),
+(4, 'Ferrari', '360 Spider', 'Cabriolet sportif', 2, 620.00, 620, 1, 'Non disponible', 'Supercar emblématique des années 2000, la Ferrari 360 Spider associe un V8 atmosphérique mélodieux à une ligne sculptée. Un cabriolet d’exception pour vivre l’émotion Ferrari cheveux au vent.', 'vehicule4.png'),
+(5, 'Porsche', '911 (901)', 'Coupé', 2, 350.00, 350, 0, 'Disponible', 'Première génération de la légendaire 911, ce modèle de 1965 offre un flat‑6 atmosphérique au caractère unique. Élégante, précise et intemporelle, elle représente l’ADN Porsche à l’état pur.', 'vehicule5.png');
+tion`
 
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id_reservation`),
+  ADD KEY `id_vehicule` (`id_vehicule`);
+
+ALTER TABLE `vehicule`
+  ADD PRIMARY KEY (`id_vehicule`);
+
+ALTER TABLE `reservation`
+  MODIFY `id_reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+ALTER TABLE `vehicule`
+  MODIFY `id_vehicule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`id_vehicule`) REFERENCES `vehicule` (`id_vehicule`);
 COMMIT;
