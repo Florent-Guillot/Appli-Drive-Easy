@@ -1,7 +1,6 @@
 <?php
 require_once 'database.php';
 
-// Récupération des paramètres envoyés
 $nom      = htmlspecialchars($_GET['nom'] ?? 'Client');
 $vehicule = htmlspecialchars($_GET['vehicule'] ?? '');
 $debut    = htmlspecialchars($_GET['debut'] ?? '');
@@ -9,14 +8,12 @@ $fin      = htmlspecialchars($_GET['fin'] ?? '');
 $montant  = htmlspecialchars($_GET['montant'] ?? '0');
 $jours    = intval($_GET['jours'] ?? 0);
 
-// Récupération du nom du véhicule
 $stmt = $pdo->prepare("SELECT marque, modele FROM vehicule WHERE id_vehicule = ?");
 $stmt->execute([$vehicule]);
 $car = $stmt->fetch();
 
 $vehiculeNom = $car ? $car['marque'] . ' ' . $car['modele'] : '—';
 
-// Format FR
 function formatFr($date) {
     return $date ? date('d/m/Y', strtotime($date)) : '—';
 }
