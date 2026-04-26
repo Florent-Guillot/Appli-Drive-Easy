@@ -1,7 +1,6 @@
 <?php
 require_once 'database.php';
 
-// Récupérer 3 véhicules disponibles
 $stmt = $pdo->query("SELECT * FROM vehicule WHERE disponibilite = 'Disponible' LIMIT 3");
 $vedettes = $stmt->fetchAll();
 ?>
