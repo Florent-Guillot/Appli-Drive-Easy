@@ -18,7 +18,7 @@ $types = $pdo->query("SELECT DISTINCT type FROM vehicule")->fetchAll(PDO::FETCH_
 <head>
     <meta charset="UTF-8">
     <title>Nos véhicules</title>
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
